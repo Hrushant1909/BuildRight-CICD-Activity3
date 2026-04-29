@@ -39,21 +39,30 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/actuator/health").permitAll()
+
                         .requestMatchers("/api/auth/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/plans/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/gallery/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/api/projects").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/projects/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.POST, "/api/plans").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/plans/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.POST, "/api/gallery").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/gallery/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/api/inquiries").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/inquiries/*/status").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.POST, "/api/inquiries").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/inquiries/my").authenticated()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -64,24 +73,22 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://127.0.0.1:5173",
-                "http://my-buildright-frontend-bucket-12345.s3-website.ap-south-1.amazonaws.com"
-        ));
+        // Allow all origins (temporary for deployment/demo)
+        configuration.setAllowedOriginPatterns(List.of("*"));
 
-        configuration.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
-        ));
+        // Allow all HTTP methods
+        configuration.setAllowedMethods(List.of("*"));
 
+        // Allow all headers
         configuration.setAllowedHeaders(List.of("*"));
 
-        configuration.setExposedHeaders(List.of("Authorization"));
+        // Expose all headers
+        configuration.setExposedHeaders(List.of("*"));
 
+        // Since you're using JWT, keep this false
         configuration.setAllowCredentials(false);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", configuration);
 
