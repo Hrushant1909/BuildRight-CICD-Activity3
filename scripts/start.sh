@@ -4,17 +4,17 @@ echo "Starting Spring Boot application..."
 
 cd /home/ec2-user/app
 
-# Kill old process if somehow still running
+# Stop old process if somehow still running
 PID=$(pgrep -f buildright-app.jar)
 
 if [ -n "$PID" ]; then
-    echo "Killing old process $PID"
+    echo "Stopping old process $PID"
     kill -9 $PID
 fi
 
-# Start app
+# Start application properly
 /usr/bin/nohup /usr/bin/java -jar /home/ec2-user/app/buildright-app.jar > /home/ec2-user/app/app.log 2>&1 &
 
 sleep 20
 
-echo "Application started"
+echo "Application started successfully"

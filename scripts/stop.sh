@@ -8,7 +8,7 @@ if [ -n "$PID" ]; then
     echo "Killing process $PID"
     kill -9 $PID
 else
-    echo "No existing application process found"
+    echo "No existing application found"
 fi
 
 sleep 5
