@@ -1,10 +1,14 @@
 #!/bin/bash
 
-echo "Stopping existing applications..."
+echo "Stopping existing Spring Boot application..."
 
-pkill -f buildright-app.jar || true
-pkill -f java || true
-pkill -f python || true
-pkill -f node || true
+PID=$(pgrep -f buildright-app.jar)
 
-sleep 10
+if [ -n "$PID" ]; then
+    echo "Killing process $PID"
+    kill -9 $PID
+else
+    echo "No existing application process found"
+fi
+
+sleep 5
