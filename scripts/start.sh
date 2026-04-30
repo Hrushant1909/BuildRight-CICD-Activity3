@@ -4,8 +4,4 @@ echo "Starting Spring Boot application..."
 
 cd /home/ec2-user/app
 
-nohup java -jar buildright-app.jar > app.log 2>&1 < /dev/null &
-
-sleep 30
-
-echo "Application startup completed"
+nohup java -jar buildright-app.jar > app.log 2>&1 &
